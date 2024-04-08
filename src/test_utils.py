@@ -1,5 +1,5 @@
 import unittest
-from utils import extract_markdown_images, extract_markdown_links, split_nodes_delimiter, text_node_to_html_node
+from utils import extract_markdown_images, extract_markdown_links, split_nodes_delimiter, split_nodes_image, split_nodes_link, text_node_to_html_node
 from leafnode import LeafNode
 from textnode import TextNode
 
@@ -33,6 +33,36 @@ class TestUtils(unittest.TestCase):
                 TextNode("This is text with a ", "text"),
                 TextNode("code block", "code"),
                 TextNode(" word", "text"),
+            ]
+        )
+    
+    def test_split_nodes_image(self):
+        node = TextNode(
+            "This is text with an ![image](https://example.com/image.png) and another ![second image](https://example.net/second_image.png)",
+            "text",
+        )
+        self.assertEqual(
+            split_nodes_image([node]),
+            [
+                TextNode("This is text with an ", "text"),
+                TextNode("image", "image", "https://example.com/image.png"),
+                TextNode(" and another ", "text"),
+                TextNode("second image", "image", "https://example.net/second_image.png")
+            ]
+        )
+
+    def test_split_nodes_link(self):
+        node = TextNode(
+            "This is text with an [link](https://example.com) and another [another](https://example.net)",
+            "text",
+        )
+        self.assertEqual(
+            split_nodes_link([node]),
+            [
+                TextNode("This is text with an ", "text"),
+                TextNode("link", "link", "https://example.com"),
+                TextNode(" and another ", "text"),
+                TextNode("another", "link", "https://example.net")
             ]
         )
 
