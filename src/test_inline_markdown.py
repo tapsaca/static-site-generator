@@ -1,5 +1,5 @@
 import unittest
-from utils import extract_markdown_images, extract_markdown_links, split_nodes_delimiter, split_nodes_image, split_nodes_link, text_node_to_html_node
+from inline_markdown import extract_markdown_images, extract_markdown_links, split_nodes_delimiter, split_nodes_image, split_nodes_link, text_node_to_html_node, text_to_textnodes
 from leafnode import LeafNode
 from textnode import TextNode
 
@@ -69,6 +69,24 @@ class TestUtils(unittest.TestCase):
     def test_text_node_to_html(self):
         node = TextNode("italic text", "italic")
         self.assertEqual(repr(text_node_to_html_node(node)), repr(LeafNode("i", "italic text")))
+    
+    def test_text_to_textnodes(self):
+        text = "This is **text** with an *italic* word and a `code block` and an ![image](https://example.com/image.png) and a [link](https://example.net)"
+        self.assertEqual(
+            text_to_textnodes(text),
+            [
+                TextNode("This is ", "text"),
+                TextNode("text", "bold"),
+                TextNode(" with an ", "text"),
+                TextNode("italic", "italic"),
+                TextNode(" word and a ", "text"),
+                TextNode("code block", "code"),
+                TextNode(" and an ", "text"),
+                TextNode("image", "image", "https://example.com/image.png"),
+                TextNode(" and a ", "text"),
+                TextNode("link", "link", "https://example.net"),
+            ]
+        )
 
 if __name__ == "__main__":
     unittest.main()

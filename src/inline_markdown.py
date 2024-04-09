@@ -19,7 +19,7 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
         for i in range(len(parts)):
             if len(parts[i]) != 0:
                 if i % 2 == 0:
-                    new_nodes.append(TextNode(parts[i], "text"))
+                    new_nodes.append(TextNode(parts[i], old_node.text_type))
                 else:
                     new_nodes.append(TextNode(parts[i], text_type))
     return new_nodes
@@ -39,6 +39,8 @@ def split_nodes_image(old_nodes: list):
                         new_nodes.append(TextNode(parts[0], "text"))
                     new_nodes.append(TextNode(image[0], "image", image[1]))
                     text = parts[1]
+                if len(text) != 0:
+                    new_nodes.append(TextNode(text, "text"))
             else:
                 new_nodes.append(old_node)
     return new_nodes
@@ -58,6 +60,8 @@ def split_nodes_link(old_nodes: list):
                         new_nodes.append(TextNode(parts[0], "text"))
                     new_nodes.append(TextNode(link[0], "link", link[1]))
                     text = parts[1]
+                if len(text) != 0:
+                    new_nodes.append(TextNode(text, "text"))
             else:
                 new_nodes.append(old_node)
     return new_nodes
@@ -76,3 +80,7 @@ def text_node_to_html_node(text_node: TextNode):
     elif text_node.text_type == "image":
         return LeafNode("img", None, {"src": text_node.url, "alt": text_node.text})
     raise ValueError("Invalid text type")
+
+def text_to_textnodes(text: str):
+    textnodes = split_nodes_delimiter(split_nodes_delimiter(split_nodes_delimiter([TextNode(text, "text")], "**", "bold"), "*", "italic"), "`", "code")
+    return split_nodes_link(split_nodes_image(textnodes))
