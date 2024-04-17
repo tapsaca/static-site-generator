@@ -1,5 +1,5 @@
 import unittest
-from block_markdown import block_to_block_type, markdown_to_blocks, heading_to_html_node, paragraph_to_html_node
+from block_markdown import block_to_block_type, markdown_to_blocks, code_to_html_node, heading_to_html_node, paragraph_to_html_node
 from leafnode import LeafNode
 from parentnode import ParentNode
 
@@ -51,6 +51,13 @@ class TestBlockMarkdown(unittest.TestCase):
                 "This is a paragraph of text. It has some **bold** and *italic* words inside of it.",
                 "* This is a list item\n* This is another list item"
             ]
+        )
+    
+    def test_code_to_html_node(self):
+        html_node = code_to_html_node("```code block```")
+        self.assertEqual(
+            html_node.to_html(),
+            "<pre><code>code block</code></pre>"
         )
     
     def test_heading_to_html_node(self):

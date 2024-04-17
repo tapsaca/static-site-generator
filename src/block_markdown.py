@@ -43,7 +43,9 @@ def markdown_to_html_node(markdown: str):
     children = []
     for block in blocks:
         block_type = block_to_block_type(block)
-        if block_type == "heading":
+        if block_type == "code":
+            children.append()
+        elif block_type == "heading":
             children.append(heading_to_html_node(block))
         elif block_type == "paragraph":
             children.append(paragraph_to_html_node(block))
@@ -55,6 +57,10 @@ def text_to_children(text: str):
     for node in text_nodes:
         children.append(text_node_to_html_node(node))
     return children
+
+def code_to_html_node(block: str):
+    children = text_to_children(block.strip("`"))
+    return ParentNode("pre", [ParentNode("code", children)])
 
 def heading_to_html_node(heading: str):
     level = len(heading) - len(heading.lstrip("#"))
