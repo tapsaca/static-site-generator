@@ -1,5 +1,5 @@
 import unittest
-from block_markdown import block_to_block_type, markdown_to_blocks, code_to_html_node, heading_to_html_node, paragraph_to_html_node
+from block_markdown import block_to_block_type, markdown_to_blocks, code_to_html_node, heading_to_html_node, paragraph_to_html_node, quote_to_html_node
 from leafnode import LeafNode
 from parentnode import ParentNode
 
@@ -71,6 +71,19 @@ class TestBlockMarkdown(unittest.TestCase):
         self.assertEqual(
             html_node.to_html(),
             "<p>This is a paragraph of text. It has some <b>bold</b> and <i>italic</i> words inside of it.</p>"
+        )
+    
+    def test_quote_to_html_node(self):
+        markdown = """
+                    >This is a
+                    >block
+                    >quote
+                    """
+        html_node = quote_to_html_node(markdown)
+        print(html_node)
+        self.assertEqual(
+            html_node.to_html(),
+            "<blockquote>This is a block quote</blockquote>"
         )
         
 if __name__ == "__main__":

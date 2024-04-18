@@ -49,6 +49,8 @@ def markdown_to_html_node(markdown: str):
             children.append(heading_to_html_node(block))
         elif block_type == "paragraph":
             children.append(paragraph_to_html_node(block))
+        elif block_type == "quote":
+            children.append(quote_to_html_node(block))
     return ParentNode("div", children)
 
 def text_to_children(text: str):
@@ -71,3 +73,10 @@ def paragraph_to_html_node(block: str):
     text = " ".join(block.split("\n"))
     children = text_to_children(text)
     return ParentNode("p", children)
+
+def quote_to_html_node(block: str):
+    text = " ".join(map(lambda line: line.strip(" >"), block.split("\n")))
+    print(text.strip())
+    children = text_to_children(text.strip())
+    print(children)
+    return ParentNode("blockquote", children)
