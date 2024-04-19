@@ -47,6 +47,8 @@ def markdown_to_html_node(markdown: str):
             children.append()
         elif block_type == "heading":
             children.append(heading_to_html_node(block))
+        elif block_type == "ordered_list":
+            children.append(ordered_list_to_html_node(block))
         elif block_type == "paragraph":
             children.append(paragraph_to_html_node(block))
         elif block_type == "quote":
@@ -68,6 +70,15 @@ def heading_to_html_node(heading: str):
     level = len(heading) - len(heading.lstrip("#"))
     children = text_to_children(heading.lstrip("# "))
     return ParentNode(f"h{level}", children)
+
+def ordered_list_to_html_node(block: str):
+    items = map(lambda item: item.strip(), block.split("\n"))
+    html_items = []
+    for item in items:
+        if len(item) != 0:
+            children = text_to_children(item[3:])
+            html_items.append(ParentNode("li", children))
+    return ParentNode("ol", html_items)
 
 def paragraph_to_html_node(block: str):
     text = " ".join(block.split("\n"))
