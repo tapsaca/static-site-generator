@@ -53,6 +53,8 @@ def markdown_to_html_node(markdown: str):
             children.append(paragraph_to_html_node(block))
         elif block_type == "quote":
             children.append(quote_to_html_node(block))
+        elif block_type == "unordered_list":
+            children.append(unordered_list_to_html_node(block))
     return ParentNode("div", children)
 
 def text_to_children(text: str):
@@ -87,7 +89,14 @@ def paragraph_to_html_node(block: str):
 
 def quote_to_html_node(block: str):
     text = " ".join(map(lambda line: line.strip(" >"), block.split("\n")))
-    print(text.strip())
     children = text_to_children(text.strip())
-    print(children)
     return ParentNode("blockquote", children)
+
+def unordered_list_to_html_node(block: str):
+    items = map(lambda item: item.strip(), block.split("\n"))
+    html_items = []
+    for item in items:
+        if len(item) != 0:
+            children = text_to_children(item[2:])
+            html_items.append(ParentNode("li", children))
+    return ParentNode("ul", html_items)

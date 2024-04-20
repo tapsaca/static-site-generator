@@ -1,5 +1,14 @@
 import unittest
-from block_markdown import block_to_block_type, markdown_to_blocks, code_to_html_node, heading_to_html_node, ordered_list_to_html_node, paragraph_to_html_node, quote_to_html_node
+from block_markdown import (
+    block_to_block_type,
+    markdown_to_blocks,
+    code_to_html_node,
+    heading_to_html_node,
+    ordered_list_to_html_node,
+    paragraph_to_html_node,
+    quote_to_html_node,
+    unordered_list_to_html_node
+)
 from leafnode import LeafNode
 from parentnode import ParentNode
 
@@ -92,10 +101,29 @@ class TestBlockMarkdown(unittest.TestCase):
                     >quote
                     """
         html_node = quote_to_html_node(markdown)
-        print(html_node)
         self.assertEqual(
             html_node.to_html(),
             "<blockquote>This is a block quote</blockquote>"
+        )
+    
+    def test_unordered_list_to_html_node(self):
+        list1 = """
+            * Item 1
+            * Item 2
+            * Item 3
+            """
+        list2 = """
+            - Item 1
+            - Item 2
+            - Item 3
+            """
+        self.assertEqual(
+            unordered_list_to_html_node(list1).to_html(),
+            "<ul><li>Item 1</li><li>Item 2</li><li>Item 3</li></ul>"
+        )
+        self.assertEqual(
+            unordered_list_to_html_node(list2).to_html(),
+            "<ul><li>Item 1</li><li>Item 2</li><li>Item 3</li></ul>"
         )
         
 if __name__ == "__main__":
