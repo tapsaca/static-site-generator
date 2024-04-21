@@ -1,14 +1,5 @@
 import unittest
-from block_markdown import (
-    block_to_block_type,
-    markdown_to_blocks,
-    code_to_html_node,
-    heading_to_html_node,
-    ordered_list_to_html_node,
-    paragraph_to_html_node,
-    quote_to_html_node,
-    unordered_list_to_html_node
-)
+from block_markdown import block_to_block_type, markdown_to_blocks, markdown_to_html_node
 from leafnode import LeafNode
 from parentnode import ParentNode
 
@@ -63,17 +54,17 @@ class TestBlockMarkdown(unittest.TestCase):
         )
     
     def test_code_to_html_node(self):
-        html_node = code_to_html_node("```code block```")
+        html_node = markdown_to_html_node("```code block```")
         self.assertEqual(
             html_node.to_html(),
-            "<pre><code>code block</code></pre>"
+            "<div><pre><code>code block</code></pre></div>"
         )
     
     def test_heading_to_html_node(self):
-        heading_lvl_1 = heading_to_html_node("# This is a level **1** heading")
-        heading_lvl_6 = heading_to_html_node("###### This is a level 6 heading")
-        self.assertEqual(heading_lvl_1.to_html(), "<h1>This is a level <b>1</b> heading</h1>")
-        self.assertEqual(heading_lvl_6.to_html(), "<h6>This is a level 6 heading</h6>")
+        heading_lvl_1 = markdown_to_html_node("# This is a level **1** heading")
+        heading_lvl_6 = markdown_to_html_node("###### This is a level 6 heading")
+        self.assertEqual(heading_lvl_1.to_html(), "<div><h1>This is a level <b>1</b> heading</h1></div>")
+        self.assertEqual(heading_lvl_6.to_html(), "<div><h6>This is a level 6 heading</h6></div>")
     
     def test_ordered_list_to_html_node(self):
         markdown = """
@@ -81,17 +72,17 @@ class TestBlockMarkdown(unittest.TestCase):
                     2. Item 2
                     3. Item 3
                     """
-        html_node = ordered_list_to_html_node(markdown)
+        html_node = markdown_to_html_node(markdown)
         self.assertEqual(
             html_node.to_html(),
-            "<ol><li>Item 1</li><li>Item 2</li><li>Item 3</li></ol>"
+            "<div><ol><li>Item 1</li><li>Item 2</li><li>Item 3</li></ol></div>"
         )
     
     def test_paragraph_to_html_node(self):
-        html_node = paragraph_to_html_node("This is a paragraph of text. It has some **bold** and *italic* words inside of it.")
+        html_node = markdown_to_html_node("This is a paragraph of text. It has some **bold** and *italic* words inside of it.")
         self.assertEqual(
             html_node.to_html(),
-            "<p>This is a paragraph of text. It has some <b>bold</b> and <i>italic</i> words inside of it.</p>"
+            "<div><p>This is a paragraph of text. It has some <b>bold</b> and <i>italic</i> words inside of it.</p></div>"
         )
     
     def test_quote_to_html_node(self):
@@ -100,10 +91,10 @@ class TestBlockMarkdown(unittest.TestCase):
                     >block
                     >quote
                     """
-        html_node = quote_to_html_node(markdown)
+        html_node = markdown_to_html_node(markdown)
         self.assertEqual(
             html_node.to_html(),
-            "<blockquote>This is a block quote</blockquote>"
+            "<div><blockquote>This is a block quote</blockquote></div>"
         )
     
     def test_unordered_list_to_html_node(self):
@@ -118,12 +109,12 @@ class TestBlockMarkdown(unittest.TestCase):
             - Item 3
             """
         self.assertEqual(
-            unordered_list_to_html_node(list1).to_html(),
-            "<ul><li>Item 1</li><li>Item 2</li><li>Item 3</li></ul>"
+            markdown_to_html_node(list1).to_html(),
+            "<div><ul><li>Item 1</li><li>Item 2</li><li>Item 3</li></ul></div>"
         )
         self.assertEqual(
-            unordered_list_to_html_node(list2).to_html(),
-            "<ul><li>Item 1</li><li>Item 2</li><li>Item 3</li></ul>"
+            markdown_to_html_node(list2).to_html(),
+            "<div><ul><li>Item 1</li><li>Item 2</li><li>Item 3</li></ul></div>"
         )
         
 if __name__ == "__main__":

@@ -44,7 +44,7 @@ def markdown_to_html_node(markdown: str):
     for block in blocks:
         block_type = block_to_block_type(block)
         if block_type == "code":
-            children.append()
+            children.append(code_to_html_node(block))
         elif block_type == "heading":
             children.append(heading_to_html_node(block))
         elif block_type == "ordered_list":
